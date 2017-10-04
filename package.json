@@ -1,0 +1,23 @@
+{
+  "name": "todoMVC-performance-test",
+  "version": "1.0.0",
+  "description": "Performance tests for framework comparison",
+  "main": "index.html",
+  "scripts": {
+    "test": "./node_modules/karma/bin/karma start --single-run",
+    "start": "./node_modules/http-server/bin/http-server ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FiberJS/todoMVC-performance-test.git"
+  },
+  "author": "Matyas Buczko",
+  "license": "The Unlicense",
+  "bugs": {
+    "url": "https://github.com/FiberJS/todoMVC-performance-test/issues"
+  },
+  "homepage": "https://github.com/FiberJS/todoMVC-performance-test",
+  "dependencies": {
+    "http-server": "^0.10.0"
+  }
+}
