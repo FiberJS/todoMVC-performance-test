@@ -1,16 +1,32 @@
 # TodoMVC Performance Comparison
 
-Both Mercury and Elm are based on the [virtual-dom][] project which appears to
-be extremely fast.
+Based on https://github.com/melnikov-s/todomvc-perf-comparison
 
-[virtual-dom]: https://github.com/Matt-Esch/virtual-dom
+First test runs look quite promising results, although todoMVC was unfortunately abandoned by both React and Angular fans.
+Apparently these frameworks don't need to compete with the open-source market any more...
 
-[**Run it yourself**][runner] to see how it works on your machine or in other
-browsers!
+# Screenshots from different browsers
 
-Here are some sample results from running this in Chrome 35 with OSX 10.9.4 on
-a Macbook Air:
+## Chrome
+![chrome](https://github.com/FiberJS/todoMVC-performance-test/blob/master/screenshots/chrome.png?raw=true)
+**Chrome 61.0.3163.100 (Official Build) (64-bit)**
 
-[![Sample results for Chrome 35 + OSX 10.9.4 on a Macbook Air](sampleResults.png)][runner]
+## Firefox
+![firefox](https://github.com/FiberJS/todoMVC-performance-test/blob/master/screenshots/firefox.png?raw=true)
+**Firefox 57.0b3 (64-bit)**
 
-[runner]: http://evancz.github.io/todomvc-perf-comparison/
+## Safari
+![safari](https://github.com/FiberJS/todoMVC-performance-test/blob/master/screenshots/safari.png?raw=true)
+**Safari 11.0 (13604.1.38.1.6)**
+
+## Test environment
+- Model Name:	MacBook Pro
+- Model Identifier:	MacBookPro13,1
+- Processor Name:	Intel Core i5
+- Processor Speed:	2 GHz
+- Number of Processors:	1
+- Total Number of Cores:	2
+- L2 Cache (per Core):	256 KB
+- L3 Cache:	4 MB
+- Memory:	8 GB
+
