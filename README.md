@@ -1,9 +1,9 @@
 # TodoMVC Performance Comparison
 
-Based on https://github.com/melnikov-s/todomvc-perf-comparison
+Live demo: https://fiberjs-performance-test.herokuapp.com
 
-First test runs look quite promising results, although todoMVC was unfortunately abandoned by both React and Angular fans.
-Apparently these frameworks don't need to compete with the open-source market any more...
+First test runs show quite promising results, although todoMVC was unfortunately abandoned by both React and Angular fans.
+So the example apps in these frameworks need updating to be relevant. On it as we speak :)
 
 # Screenshots from different browsers
 
@@ -30,3 +30,5 @@ Apparently these frameworks don't need to compete with the open-source market an
 - L3 Cache:	4 MB
 - Memory:	8 GB
 
+# Original
+Based on project: https://github.com/melnikov-s/todomvc-perf-comparison
