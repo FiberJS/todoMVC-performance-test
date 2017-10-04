@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TodoMVC Benchmark</title>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script src="resources/benchmark-runner.js" defer></script>
+<script src="resources/tests.js" defer></script>
+<style>
+body {
+  font-family: 'Lucida Grande','Trebuchet MS','Bitstream Vera Sans',Verdana,Helvetica,sans-serif;
+  background-color: rgb(253, 253, 253);
+}
+iframe { border: 1px solid black; }
+button { margin: 15px 5px; }
+ol { list-style: none; margin: 5px 0; padding: 0; }
+ol ol { margin-left: 2em; list-position: outside; }
+ol li { font-size: 12px; font-weight: bold; }
+ol ol li { font-size: 10px; font-weight: normal; }
+.running { text-decoration: underline; }
+.ran { color: grey; }
+nav { position: absolute; right: 10px; }
+</style>
+</head>
+<body>
+  <div id="analysis" style="float:left; display: none;">
+    <div id="barchart_values"></div>
+    <div style="width: 400px; margin: 30px;">
+      <p>
+          <small>original source: <a href="https://github.com/melnikov-s/todomvc-perf-comparison">melnikov-s/todomvc-perf-comparison</a></small>
+      </p>
+      <p>
+          The test is using React version 0.10.0 so it is not representative enough
+          for a fair comparison. I am porting these projects to newer versions,
+          but copied over from original version with these examples.
+      </p>
+      <p>
+          Another note that it was also using an older version of Angular (1.2)
+          but it was so slow it made no sense to keep it in the list...
+          Will try to import a 2+ version to see proper comparisons.
+      </p>
+    </div>
+  </div>
+  <script src="resources/manager.js"></script>
+</body>
+
+</html>
