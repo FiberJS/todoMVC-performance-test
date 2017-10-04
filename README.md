@@ -8,16 +8,16 @@ So the example apps in these frameworks need updating to be relevant. On it as w
 # Screenshots from different browsers
 
 ## Chrome
+**61.0.3163.100 (Official Build) (64-bit)**
 ![chrome](https://github.com/FiberJS/todoMVC-performance-test/blob/master/screenshots/chrome.png?raw=true)
-**Chrome 61.0.3163.100 (Official Build) (64-bit)**
 
 ## Firefox
+**57.0b3 (64-bit)**
 ![firefox](https://github.com/FiberJS/todoMVC-performance-test/blob/master/screenshots/firefox.png?raw=true)
-**Firefox 57.0b3 (64-bit)**
 
 ## Safari
+**11.0 (13604.1.38.1.6)**
 ![safari](https://github.com/FiberJS/todoMVC-performance-test/blob/master/screenshots/safari.png?raw=true)
-**Safari 11.0 (13604.1.38.1.6)**
 
 ## Test environment
 - Model Name:	MacBook Pro
