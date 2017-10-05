@@ -3,8 +3,6 @@ var Suites = [];
 
 function addItems(newTodo, contentWindow) {
   var appView = contentWindow.appView;
-  console.log(newTodo);
-  window.cw = contentWindow;
   for (var i = 0; i < numberOfItemsToAdd; i++) {
     var inputEvent = document.createEvent('Event');
     inputEvent.initEvent('input', true, true);
@@ -112,18 +110,6 @@ Suites.push({
   tests: generalTests()
 });
 
-// Suites.push({
-//   name: 'Angular',
-//   url: 'todomvc/angularjs-perf/index.html',
-//   version: '1.2.14',
-//   prepare: function (runner, contentWindow, contentDocument) {
-//     return runner.waitForElement('#new-todo').then(function (element) {
-//       element.focus();
-//       return element;
-//     });
-//   },
-//   tests: generalTests()
-// });
 
 Suites.push({
   name: 'React',

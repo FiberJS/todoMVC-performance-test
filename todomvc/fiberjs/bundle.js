@@ -864,7 +864,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var todoPatch = function todoPatch(view) {
     return {
         title: function title(_title) {
-            view.$.label.innerHTML = (0, _marked2.default)(_title).replace(/<p>|<\/p>/g, '');
+            view.$.label.innerHTML = _title;
             view.$.editor.value = _title;
         },
         state: function state(_state, todo) {
@@ -1975,7 +1975,7 @@ function escape(html, encode) {
 }
 
 function unescape(html) {
-	// explicitly match decimal, hex, and named HTML entities 
+	// explicitly match decimal, hex, and named HTML entities
   return html.replace(/&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/g, function(_, n) {
     n = n.toLowerCase();
     if (n === 'colon') return ':';
