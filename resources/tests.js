@@ -3,6 +3,8 @@ var Suites = [];
 
 function addItems(newTodo, contentWindow) {
   var appView = contentWindow.appView;
+  console.log(newTodo);
+  window.cw = contentWindow;
   for (var i = 0; i < numberOfItemsToAdd; i++) {
     var inputEvent = document.createEvent('Event');
     inputEvent.initEvent('input', true, true);
@@ -22,6 +24,11 @@ function addItems(newTodo, contentWindow) {
     keydownEvent.keyCode = 13;
     keydownEvent.charCode = 13;
     newTodo.dispatchEvent(keydownEvent);
+
+    var keyupEvent = new KeyboardEvent("keyup",{
+      "key": "Enter"
+    });
+    newTodo.dispatchEvent(keyupEvent);
   }
 }
 
@@ -31,30 +38,30 @@ function generalTests() {
       addItems(newTodo, contentWindow);
       return atLeast(contentDocument, '.toggle', numberOfItemsToAdd);
     }),
-    new BenchmarkTestStep('Completing half of the items', function (newTodo, contentWindow, contentDocument) {
+    new BenchmarkTestStep('Completing all items', function (newTodo, contentWindow, contentDocument) {
       var checkboxes = contentDocument.querySelectorAll('.toggle');
-      for (var i = 0; i < checkboxes.length/2; i++)
-      checkboxes[i].click();
-
-      return atLeast(contentDocument, '.toggle:checked', numberOfItemsToAdd/2);
-    }),
-    new BenchmarkTestStep('Changing View', function (newTodo, contentWindow, contentDocument) {
-      contentDocument.querySelectorAll('#filters a')[1].click();
-
-      return atMost(contentDocument, '.toggle', numberOfItemsToAdd);
-    }),
-    new BenchmarkTestStep('Changing views back', function (newTodo, contentWindow, contentDocument) {
-      contentDocument.querySelectorAll('#filters a')[0].click();
-
-      return atLeast(contentDocument, '.toggle', numberOfItemsToAdd);
-    }),
-    new BenchmarkTestStep('Completing other half of the items', function (newTodo, contentWindow, contentDocument) {
-      var checkboxes = contentDocument.querySelectorAll('.toggle');
-      for (var i = checkboxes.length / 2; i < checkboxes.length; i++)
+      for (var i = 0; i < checkboxes.length; i++)
       checkboxes[i].click();
 
       return atLeast(contentDocument, '.toggle:checked', numberOfItemsToAdd);
     }),
+    // new BenchmarkTestStep('Changing View', function (newTodo, contentWindow, contentDocument) {
+    //   contentDocument.querySelectorAll('#filters a, .filters a')[1].click();
+    //
+    //   return atMost(contentDocument, '.toggle', numberOfItemsToAdd);
+    // }),
+    // new BenchmarkTestStep('Changing views back', function (newTodo, contentWindow, contentDocument) {
+    //   contentDocument.querySelectorAll('#filters a, .filters a')[0].click();
+    //
+    //   return atLeast(contentDocument, '.toggle', numberOfItemsToAdd);
+    // }),
+    // new BenchmarkTestStep('Completing other half of the items', function (newTodo, contentWindow, contentDocument) {
+    //   var checkboxes = contentDocument.querySelectorAll('.toggle');
+    //   for (var i = checkboxes.length / 2; i < checkboxes.length; i++)
+    //   checkboxes[i].click();
+    //
+    //   return atLeast(contentDocument, '.toggle:checked', numberOfItemsToAdd);
+    // }),
     new BenchmarkTestStep('Deleting all items', function (newTodo, contentWindow, contentDocument) {
       var deleteButtons = contentDocument.querySelectorAll('.destroy');
       for (var i = 0; i < deleteButtons.length; i++)
@@ -92,18 +99,18 @@ Suites.push({
   tests: generalTests()
 });
 
-// Suites.push({
-//   name: 'Angular 2',
-//   url: 'todomvc/angular2/index.html',
-//   version: '2.0',
-//   prepare: function (runner, contentWindow, contentDocument) {
-//     return runner.waitForElement('#new-todo').then(function (element) {
-//       element.focus();
-//       return element;
-//     });
-//   },
-//   tests: generalTests()
-// });
+Suites.push({
+  name: 'Angular 2',
+  url: 'todomvc/angular2/index.html',
+  version: '2.0',
+  prepare: function (runner, contentWindow, contentDocument) {
+    return runner.waitForElement('.new-todo').then(function (element) {
+      element.focus();
+      return element;
+    });
+  },
+  tests: generalTests()
+});
 
 // Suites.push({
 //   name: 'Angular',
@@ -125,6 +132,20 @@ Suites.push({
   prepare: function (runner, contentWindow, contentDocument) {
     contentWindow.Utils.store = function () {}
     return runner.waitForElement('#new-todo').then(function (element) {
+      element.focus();
+      return element;
+    });
+  },
+  tests: generalTests()
+});
+
+Suites.push({
+  name: 'React + Redux',
+  url: 'todomvc/redux/index.html',
+  version: '(15.5 + 3.5.2)',
+  prepare: function (runner, contentWindow, contentDocument) {
+    // contentWindow.Utils.store = function () {}
+    return runner.waitForElement('.new-todo').then(function (element) {
       element.focus();
       return element;
     });
