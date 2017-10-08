@@ -5,12 +5,25 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script src="resources/benchmark-runner.js" defer></script>
 <script src="resources/tests.js" defer></script>
+<link rel="icon" href="favicon.ico?v=2" />
 <style>
 body {
   font-family: 'Lucida Grande','Trebuchet MS','Bitstream Vera Sans',Verdana,Helvetica,sans-serif;
   background-color: rgb(253, 253, 253);
 }
-iframe { border: 1px solid black; }
+#barchart_values {
+  clear: both;
+}
+#barchart_values > div {
+  float: left;
+  margin-bottom: 20px;
+}
+iframe {
+  border: 1px solid black;
+  position: absolute;
+  left: 200px;
+  top: 10px;
+}
 button { margin: 15px 5px; }
 ol { list-style: none; margin: 5px 0; padding: 0; }
 ol ol { margin-left: 2em; list-position: outside; }
@@ -18,22 +31,29 @@ ol li { font-size: 12px; font-weight: bold; }
 ol ol li { font-size: 10px; font-weight: normal; }
 .running { text-decoration: underline; }
 .ran { color: grey; }
-nav { position: absolute; right: 10px; }
+nav { position: absolute; right: 10px; top: 10px; }
 </style>
 </head>
 <body>
-  <div id="analysis" style="float:left; display: none;">
+  <div id="analysis" style="display: none; width: 90%">
     <div id="barchart_values"></div>
-    <div style="width: 400px; margin: 30px;">
+    <div style="clear: both"></div>
+    <div style="margin: 15px; margin-right: 200px;">
       <p>
-          <small>original source: <a href="https://github.com/melnikov-s/todomvc-perf-comparison">melnikov-s/todomvc-perf-comparison</a></small>
+          The cost of magic... You can see how <strong>FiberJS</strong>,
+          Backbone, Elm and Mercury outperform React and Angular espacially with
+          100+ items. Actually around 1000 and 2000 items they blow up and become
+          painfully slow - this why I set the max as 500 items for now.
       </p>
       <p>
-          Still need to get fresher versions of bot Angular2 and React. The Angular2
+          Note: Still need to get fresher versions of both Angular2 and React. The Angular2
           test is using 2.0 and the React + Redux test is using React 15.5.
       </p>
       <p>
           Will try to get a React version which is not using Redux as it seems that slows the process down significantly...
+      </p>
+      <p>
+          <small>ported from: <a href="https://github.com/melnikov-s/todomvc-perf-comparison">melnikov-s/todomvc-perf-comparison</a></small>
       </p>
     </div>
   </div>

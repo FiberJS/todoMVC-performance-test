@@ -67,7 +67,1584 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-!function(e,t){ true?module.exports=t():"function"==typeof define&&define.amd?define("fiber",[],t):"object"==typeof exports?exports.fiber=t():e.fiber=t()}(this,function(){return function(e){function t(r){if(n[r])return n[r].exports;var o=n[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,t),o.l=!0,o.exports}var n={};return t.m=e,t.c=n,t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=10)}([function(e,t,n){"use strict";function r(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function o(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e){var t=e.split("/").slice(1),n="data",r=d,o=!0,i=!1,a=void 0;try{for(var u,l=t[Symbol.iterator]();!(o=(u=l.next()).done);o=!0){var c=u.value;if(n+="/"+c,!r.children[c]){var f=new h(c,n);r.children[c]=f,r.element.appendChild(f.element)}r=r.children[c]}}catch(e){i=!0,a=e}finally{try{!o&&l.return&&l.return()}finally{if(i)throw a}}return r}function u(e){var t=e.split("/").slice(1),n=d,r=t.pop(),o=!0,i=!1,a=void 0;try{for(var u,l=t[Symbol.iterator]();!(o=(u=l.next()).done);o=!0){var c=u.value;if(!n.children[c])return!1;n=n.children[c]}}catch(e){i=!0,a=e}finally{try{!o&&l.return&&l.return()}finally{if(i)throw a}}return n.children[r]&&delete n.children[r],!0}Object.defineProperty(t,"__esModule",{value:!0}),t.DataEventPool=t.EventPool=t.DefinedEvent=void 0;var l=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}();t.getOrCreateEventPool=a,t.detachEventPool=u;var c=n(2),f=n(5),s=function(e){return e&&e.__esModule?e:{default:e}}(f),p=t.DefinedEvent=(0,c.basicEvent)("Fiber:NameSpace:Defined"),v=t.EventPool=function(){function e(){i(this,e)}return l(e,[{key:"trigger",value:function(e){var t=this;return new Promise(function(n,r){setTimeout(function(){return n(t.triggerSync(e))},0)})}},{key:"triggerSync",value:function(e){return this.element.dispatchEvent(e.event())}},{key:"listen",value:function(){for(var e=0;e<arguments.length;e+=2)this.addEventListener(arguments.length<=e?void 0:arguments[e],arguments.length<=e+1?void 0:arguments[e+1])}},{key:"addEventListener",value:function(e,t){var n=this,r=void 0,o=[];return"string"==typeof e?(r=t,e.trim().split(/\s/).forEach(function(e){o.push(e),n.element.addEventListener(e,r)})):(r=function(e){return t(e.detail)},this.element.addEventListener(e.EventName,r),o.push(e.EventName)),{callback:r,events:o}}},{key:"defineState",value:function(e){var t=this;this.__state||(this.__state=new s.default),this.state=this.__state.reader,Object.getOwnPropertyNames(e).forEach(function(n){t.__state.addProperty(n);for(var r=e[n](t.__state.modifier),o=0;o<r.length;o+=2)t.addEventListener(r[o],r[o+1])}),this.trigger(new p)}}],[{key:"forElement",value:function(e,t){var n=new this;return n.name=t&&t.constructor.name,n.element=e,n}},{key:"forComponent",value:function(e){var t=new this;return t.name=e.constructor.name,t.element=e.view,t}}]),e}(),h=t.DataEventPool=function(e){function t(e,n){i(this,t);var o=r(this,(t.__proto__||Object.getPrototypeOf(t)).call(this));return o.name=e,o.path=n,o.element=o.createElement(e),o.children={},o}return o(t,e),l(t,[{key:"detach",value:function(){delete this.element,u(this.path)}},{key:"createElement",value:function(e){var t=document.createElement(function(e){return"#"==e[0]?"item":e.toLowerCase().replace(/[^a-z0-9]/g,"")}(e));return t.id=function(e){return e.replace(/[^A-Za-z0-9\/]/g,"").replace(/[\/]/g,"-")}(e),t}}]),t}(v);v.depth=0;var d=new h("data")},function(e,t,n){"use strict";function r(e){return"string"==typeof e?e:e.EventName}function o(){return(++a).toString()}Object.defineProperty(t,"__esModule",{value:!0});var i={components:new Map,listeners:new Map,observers:new Map,elementAttribute:"fiber-component-id"};i.init=function(){this.observe(document.body),this.init=!1},i.observe=function(e){var t=this,n=(this.observers.size+1).toString();if(!e._GC_observerId){e._GC_observerId=n;var r=new MutationObserver(function(e){e.forEach(function(e){e.removedNodes&&e.removedNodes.forEach(function(e){t.removeNode(e)})})});r.observe(e,{childList:!0,subtree:!0}),this.observers.set(n,{element:e,observer:r})}},i.removeNode=function(e){var t=this;if(e.querySelectorAll&&!e._GC_observerId){var n=function(e){var n=e.attributes[t.elementAttribute].value,r=t.components.get(n);r&&t.destroy(r)};e.querySelectorAll("["+this.elementAttribute+"]").forEach(n),e.attributes[this.elementAttribute]&&n(e)}},i.registerComponent=function(e){e.componentId=o(),this.components.set(e.componentId,e),this.listeners.set(e.componentId,[]),e.view.setAttribute(this.elementAttribute,e.componentId),i.init&&i.init()},i.registerListener=function(e,t,n,o){this.listeners.has(e.componentId)&&this.listeners.get(e.componentId).push({element:t,eventName:r(n),callback:o})},i.destroy=function(e){var t=!0,n=!1,r=void 0;try{for(var o,i=this.listeners.get(e.componentId)[Symbol.iterator]();!(t=(o=i.next()).done);t=!0){var a=o.value;a.element.removeEventListener(a.eventName,a.callback)}}catch(e){n=!0,r=e}finally{try{!t&&i.return&&i.return()}finally{if(n)throw r}}e.view=null,this.components.delete(e.componentId),this.listeners.delete(e.componentId)},t.default=i;var a=0},function(e,t,n){"use strict";function r(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function o(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function a(e){var t=Object.getOwnPropertyNames(e);return function(n){function a(){i(this,a);for(var n=r(this,(a.__proto__||Object.getPrototypeOf(a)).call(this)),o=new v.default(n),u=arguments.length,l=Array(u),c=0;c<u;c++)l[c]=arguments[c];for(var s=0;s<l.length;s++){var p=t[s];if(void 0===p||void 0===e[p])throw new m(n,p,l[s]);var d=h.Optional.from(e[p]),y=f(d,2),b=y[0],g=y[1];if(o.addProperty(p),!b||void 0!==l[s]&&null!==l[s])if("Mixed"===g.name)o.modifier[p]=l[s];else if(g==Number||g==String||g==Boolean)o.modifier[p]=new g(l[s]).valueOf();else{if(g instanceof Object&&!(l[s]instanceof g))throw new m(n,p,l[s],g);o.modifier[p]=l[s]}else o.modifier[p]=l[s]}return n}return o(a,n),a}(y)}function u(e){return function(e){function t(){return i(this,t),r(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return o(t,e),t}(e).alias("Event"+ ++d)}function l(e){return function(e){function t(){return i(this,t),r(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return o(t,e),t}(y).alias(e||"Event"+ ++d)}function c(e,t){return u(e).alias(t)}Object.defineProperty(t,"__esModule",{value:!0}),t.Event=void 0;var f=function(){function e(e,t){var n=[],r=!0,o=!1,i=void 0;try{for(var a,u=e[Symbol.iterator]();!(r=(a=u.next()).done)&&(n.push(a.value),!t||n.length!==t);r=!0);}catch(e){o=!0,i=e}finally{try{!r&&u.return&&u.return()}finally{if(o)throw i}}return n}return function(t,n){if(Array.isArray(t))return t;if(Symbol.iterator in Object(t))return e(t,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),s=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}();t.defineEventType=a,t.eventOfType=u,t.basicEvent=l,t.defineEvent=c;var p=n(5),v=function(e){return e&&e.__esModule?e:{default:e}}(p),h=n(11),d=0,y=function(){function e(){i(this,e),this.name=this.constructor.EventName}return s(e,[{key:"event",value:function(){return this.originalEvent||(this.originalEvent=new CustomEvent(this.name,{detail:this,bubbles:!this.constructor._cancelBubble,cancelable:!0})),this.originalEvent}},{key:"stopPropagation",value:function(){this.originalEvent&&this.originalEvent.stopPropagation()}},{key:"preventDefault",value:function(){this.originalEvent&&this.originalEvent.preventDefault()}}],[{key:"bubbles",value:function(e){return this._cancelBubble=!e,this}},{key:"alias",value:function(e){return this.EventName=e,this}},{key:"on",value:function(e){return{namespace:e,event:this}}}]),e}();t.Event=y;var m=function(e){function t(e,n,o,a){if(i(this,t),a)var u=r(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,"Type mismatch for Event '"+e.name+"' for attribute '"+n+"'"));else var u=r(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,"Unexpected parameter for Event '"+e.name+"'"));return u.event=e,u.name=n,u.value=o,u.type=a,r(u)}return o(t,e),t}(Error)},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function o(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function i(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var a=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),u=n(4),l=function(e){return e&&e.__esModule?e:{default:e}}(u),c=n(0),f=function(e){function t(){return r(this,t),o(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return i(t,e),a(t,null,[{key:"attachTo",value:function(e){var t=new this;return t.eventPool=e instanceof c.EventPool?e:(0,c.getOrCreateEventPool)(e),t.listen(),t}}]),t}(l.default);t.default=f},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),i=n(0),a=n(7),u=function(){function e(){r(this,e);for(var t=arguments.length,n=Array(t),o=0;o<t;o++)n[o]=arguments[o];this.init.apply(this,n)}return o(e,[{key:"init",value:function(){}},{key:"listen",value:function(){}},{key:"on",value:function(e){return e instanceof a.EventFlowType?this.flow(e):e instanceof i.EventPool||e instanceof a.EventFlow?e:(0,i.getOrCreateEventPool)(e)}},{key:"flow",value:function(e){return new a.EventFlow(e)}}]),e}();t.default=u},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var o=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),i=n(6),a=function(e){return e&&e.__esModule?e:{default:e}}(i),u=function(){function e(t){r(this,e),this.reader=t||{},this.modifier={}}return o(e,[{key:"addProperty",value:function(e){var t=this;this.modifier[e]=null,Object.defineProperty(this.reader,e,{get:function(){return(0,a.default)(t.modifier[e])},enumerable:!0})}}]),e}();t.default=u},function(e,t,n){"use strict";function r(e){if(!(e instanceof Object)||e instanceof Function)return e;if(e instanceof Array)return e.map(function(e){return r(e)});if(e instanceof Number||e instanceof String||e instanceof Date||e instanceof RegExp||e instanceof Boolean)return new e.constructor(e);if(e.clone instanceof Function)return e.clone();var t={},n=!0,o=!1,i=void 0;try{for(var a,u=Object.getOwnPropertyNames(e)[Symbol.iterator]();!(n=(a=u.next()).done);n=!0){var l=a.value;t[l]=r(e[l])}}catch(e){o=!0,i=e}finally{try{!n&&u.return&&u.return()}finally{if(o)throw i}}return t}Object.defineProperty(t,"__esModule",{value:!0}),t.default=r},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0}),t.EventFlow=t.EventFlowType=void 0;var o=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),i=(n(2),n(0));t.EventFlowType=function e(){r(this,e);for(var t=arguments.length,n=Array(t),o=0;o<t;o++)n[o]=arguments[o];this.steps=n,n.forEach(function(e){if(!(e.namespace instanceof i.EventPool&&e.event.EventName))throw new Error("wrong argument for Flow step!")})},t.EventFlow=function(){function e(t){var n=this;r(this,e),this.steps=t.steps,this.currentEvent=null,this.currentNameSpace=null,this.promise=new Promise(function(e,t){n.resolve=e,n.reject=t})}return o(e,[{key:"trigger",value:function(e){var t=this.steps.shift();return t||this.reject(e),!e instanceof t.event&&this.reject(e),this.currentEvent=e,this.currentNameSpace=t.namespace,e.flow=this,this.currentNameSpace.trigger(e),this.steps.length||this.resolve(this),this.promise}},{key:"listen",value:function(){throw new Error("You can't set listeners on an EventFlow! (yet?)")}}]),e}()},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function a(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var u=function(){function e(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}return function(t,n,r){return n&&e(t.prototype,n),r&&e(t,r),t}}(),l=function e(t,n,r){null===t&&(t=Function.prototype);var o=Object.getOwnPropertyDescriptor(t,n);if(void 0===o){var i=Object.getPrototypeOf(t);return null===i?void 0:e(i,n,r)}if("value"in o)return o.value;var a=o.get;if(void 0!==a)return a.call(r)},c=n(4),f=r(c),s=n(0),p=n(9),v=r(p),h=n(1),d=r(h),y=function(e){function t(){return o(this,t),i(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return a(t,e),u(t,[{key:"render",value:function(){return this.constructor.template&&(this.view=v.default.render(this.constructor.template)),this.listen(),this.view}},{key:"getOrCreateEventPool",value:function(){return this.eventPool||(this.eventPool=s.EventPool.forComponent(this))}},{key:"on",value:function(e){return e=l(t.prototype.__proto__||Object.getPrototypeOf(t.prototype),"on",this).call(this,e),e instanceof s.EventPool?new m(this,e):e}},{key:"ui",value:function(e){var t=v.default.getElement(e||this.view,this.view);return t?new m(this,s.EventPool.forElement(t,this)):null}},{key:"view",get:function(){return this._view},set:function(e){this._view=e,this.getOrCreateEventPool().element=e,e&&d.default.registerComponent(this)}}],[{key:"elementName",value:function(){return this.name.replace("Component","").replace(/[A-Z]/g,"-$&").toLowerCase().substr(1)}},{key:"withTemplate",value:function(e){return function(e){function t(){return o(this,t),i(this,(t.__proto__||Object.getPrototypeOf(t)).apply(this,arguments))}return a(t,e),u(t,null,[{key:"__setTemplate",value:function(e){return this.template=e,this}}]),t}(this).__setTemplate(e)}},{key:"attachTo",value:function(e){e=v.default.getElement(e);for(var t=arguments.length,n=Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];var o=new(Function.prototype.bind.apply(this,[null].concat(n)));o._attached=!0;var i=this.template?v.default.render(this.template):null;return i?i.tagName==e.tagName?(e.replaceWith(i),o.view=i):(o.view=e,o.view.append(i)):o.view=e,o.listen(),o}},{key:"populate",value:function(e){var t=this;if(!e instanceof Element)return!1;var n=e.querySelectorAll(this.elementName());return e.tagName.toLowerCase()==this.elementName()&&(n=[e]),n.forEach(function(e){t.attachTo(e)}),n}}]),t}(f.default),m=function(){function e(t,n){o(this,e),this.component=t,this.eventPool=n}return u(e,[{key:"listen",value:function(){for(var e=this,t=arguments,n=0;n<arguments.length;n+=2)!function(n){var r=e.eventPool.addEventListener(t.length<=n?void 0:t[n],t.length<=n+1?void 0:t[n+1]);r.events.forEach(function(t){return d.default.registerListener(e.component,e.eventPool.element,t,r.callback)})}(n)}},{key:"trigger",value:function(e){return this.eventPool.trigger(e)}},{key:"triggerSync",value:function(e){return this.eventPool.triggerSync(e)}}]),e}();t.default=y},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r=n(1),o=function(e){return e&&e.__esModule?e:{default:e}}(r),i={};i.getElement=function(e,t){return"string"==typeof e?(t||document).querySelector(e):e},i.render=function(e,t){if(e instanceof Element)return e;var n=document.createElement(t||"div");return n.innerHTML=e,t||1!=n.childElementCount?n:n.firstElementChild},i.renderWithComponents=function(e){for(var t=arguments.length,n=Array(t>1?t-1:0),r=1;r<t;r++)n[r-1]=arguments[r];e=i.render(e);var o=!0,a=!1,u=void 0;try{for(var l,c=n[Symbol.iterator]();!(o=(l=c.next()).done);o=!0){l.value.populate(e)}}catch(e){a=!0,u=e}finally{try{!o&&c.return&&c.return()}finally{if(a)throw u}}return e},i.detach=function(e){o.default.observe(e),e.remove()},t.default=i},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}Object.defineProperty(t,"__esModule",{value:!0});var o=n(1),i=r(o),a=n(3),u=r(a),l=n(8),c=r(l),f=n(0),s=n(2),p=n(7),v=n(6),h=r(v),d=n(9),y=r(d),m=n(12),b=r(m),g={};g.GC=i.default,g.DataComponent=u.default,g.UIComponent=c.default,g.namespace=f.getOrCreateEventPool,g.NameSpace={create:f.getOrCreateEventPool,Defined:f.DefinedEvent},g.Event=s.Event,g.defineEvent=s.defineEvent,g.defineEventType=s.defineEventType,g.basicEvent=s.basicEvent,g.EventFlow={define:function(){for(var e=arguments.length,t=Array(e),n=0;n<e;n++)t[n]=arguments[n];return new(Function.prototype.bind.apply(p.EventFlowType,[null].concat(t)))}},g.clone=h.default,g.DOM=y.default,g.Debugger=b.default,g.System=(0,f.getOrCreateEventPool)("data/system"),g.System.Ready=(0,s.basicEvent)("System:Ready");var w=g.DataComponent.attachTo(g.System);g.app=function(e){e(),w.on(g.System).trigger(new g.System.Ready)},t.default=g},function(e,t,n){"use strict";function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0}),(t.Optional=function(e){return{$isOptional:!0,value:e}}).from=function(e){return e.$isOptional?[!0,e.value]:[!1,e]};t.Mixed=function e(){r(this,e)}},function(e,t,n){"use strict";function r(e){return e&&e.__esModule?e:{default:e}}function o(e){if(e.name)return e.name;try{return e.toString().match(/_this[0-9][.]([^(]*)[(]/).pop()}catch(e){return"[inline method]"}}function i(){return" ".repeat(4*f.EventPool.depth)}Object.defineProperty(t,"__esModule",{value:!0});var a=n(3),u=r(a),l=n(8),c=r(l),f=n(0),s={},p=null,v="font-weight: bold; color: black;",h="font-weight: normal; color: red;",d="font-weight: normal;";s.init=function(){c.default.prototype.$$on=c.default.prototype.on,c.default.prototype.on=function(e){return p=this,this.$$on(e)},c.default.prototype.$$ui=c.default.prototype.ui,c.default.prototype.ui=function(e){return p=this,this.$$ui(e)},c.default.prototype.$$flow=c.default.prototype.flow,c.default.prototype.flow=function(e){return p=this,this.$$flow(e)},u.default.prototype.$$on=u.default.prototype.on,u.default.prototype.on=function(e){return p=this,this.$$on(e)},u.default.prototype.$$flow=u.default.prototype.flow,u.default.prototype.flow=function(e){return p=this,this.$$flow(e)},f.EventPool.prototype.$$trigger=f.EventPool.prototype.trigger,f.EventPool.prototype.trigger=function(e){var t=this.name&&"data/"+this.name||"DOM",n=p.constructor.name;return 1==n.length&&(n="FiberJS"),console.log(i()+"%c"+e.name+" %ctriggered on %c"+t+"%c by %c"+n,"font-weight: bold; color: navy;",d,v,d,v),s.showEvents&&console.log(e),this.$$trigger(e)},f.EventPool.prototype.$$addEventListener=f.EventPool.prototype.addEventListener,f.EventPool.prototype.addEventListener=function(e,t){var n="string"==typeof e,r=n?e:e.EventName,a=p.constructor.name,u=p.view,l=function(e){return n?console.log(i()+"%c"+r.replace(" ","/")+"%c was triggered on "+a,"font-weight: bold; color: navy;",d):u&&s.showView?console.log(""+i()+a+" listening for %c"+r,u,h):console.log(i()+"%c"+a+"%c listening for %c"+r,"font-weight: bold; color: #2D602D;",d,h),console.log(i()+"%c"+o(t)+"%c is called by "+a,"font-weight: bold; color: #d9534f;",d),t(e)};return this.$$addEventListener(e,l)}},t.default=s}])});
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("fiber", [], factory);
+	else if(typeof exports === 'object')
+		exports["fiber"] = factory();
+	else
+		root["fiber"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var EventPool = exports.EventPool = function () {
+    function EventPool() {
+        _classCallCheck(this, EventPool);
+    }
+
+    _createClass(EventPool, [{
+        key: 'trigger',
+        value: function trigger(fiberEvent) {
+            var _this = this;
+
+            return new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    return resolve(_this.triggerSync(fiberEvent));
+                }, 0);
+            });
+        }
+    }, {
+        key: 'triggerSync',
+        value: function triggerSync(fiberEvent) {
+            return this.element.dispatchEvent(fiberEvent.event());
+        }
+    }, {
+        key: 'listen',
+        value: function listen() {
+            for (var i = 0; i < arguments.length; i += 2) {
+                this.addEventListener(arguments.length <= i ? undefined : arguments[i], arguments.length <= i + 1 ? undefined : arguments[i + 1]);
+            }
+        }
+    }, {
+        key: 'addEventListener',
+        value: function addEventListener(fiberEvent, eventHandler) {
+            var _this2 = this;
+
+            var realHandler = void 0;
+            var events = [];
+            if (typeof fiberEvent == 'string') {
+                realHandler = eventHandler;
+                fiberEvent.trim().split(/\s/).forEach(function (strEvent) {
+                    events.push(strEvent);
+                    _this2.element.addEventListener(strEvent, realHandler);
+                });
+            } else if (!(fiberEvent instanceof Event) && fiberEvent.namespace instanceof EventPool) {
+                realHandler = function realHandler(event) {
+                    return eventHandler(event.detail);
+                };
+                fiberEvent.namespace.element.addEventListener(fiberEvent.event.EventName, realHandler);
+                events.push(fiberEvent.EventName);
+            } else {
+                realHandler = function realHandler(event) {
+                    return eventHandler(event.detail);
+                };
+                this.element.addEventListener(fiberEvent.EventName, realHandler);
+                events.push(fiberEvent.EventName);
+            }
+            return {
+                callback: realHandler,
+                events: events
+            };
+        }
+    }], [{
+        key: 'forElement',
+        value: function forElement(element, component) {
+            var instance = new this();
+
+            instance.name = component && component.constructor.name;
+            instance.element = element;
+
+            return instance;
+        }
+    }, {
+        key: 'forComponent',
+        value: function forComponent(component) {
+            var instance = new this();
+
+            instance.name = component.constructor.name;
+            instance.element = component.view;
+
+            return instance;
+        }
+    }]);
+
+    return EventPool;
+}();
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.NameSpace = exports.DefinedEvent = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.getNameSpaceByPath = getNameSpaceByPath;
+exports.detachEventPool = detachEventPool;
+
+var _event = __webpack_require__(3);
+
+var _eventPool = __webpack_require__(0);
+
+var _readOnly = __webpack_require__(6);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DefinedEvent = exports.DefinedEvent = (0, _event.basicEvent)('Fiber:NameSpace:Defined');
+
+var NameSpace = exports.NameSpace = function (_EventPool) {
+    _inherits(NameSpace, _EventPool);
+
+    function NameSpace(name, path) {
+        _classCallCheck(this, NameSpace);
+
+        var _this = _possibleConstructorReturn(this, (NameSpace.__proto__ || Object.getPrototypeOf(NameSpace)).call(this));
+
+        _this.name = name;
+        _this.path = path;
+        _this.element = _this.createElement(name);
+        _this.children = {};
+        return _this;
+    }
+
+    _createClass(NameSpace, [{
+        key: 'detach',
+        value: function detach() {
+            delete this.element;
+            detachEventPool(this.path);
+        }
+    }, {
+        key: 'createElement',
+        value: function createElement(name) {
+            var idFromName = function idFromName(name) {
+                return name.replace(/[^A-Za-z0-9/]/g, '').replace(/[/]/g, '-');
+            };
+            var elementFromName = function elementFromName(name) {
+                return name[0] == '#' ? 'item' : name.toLowerCase().replace(/[^a-z0-9]/g, '');
+            };
+
+            var element = document.createElement(elementFromName(name));
+            element.id = idFromName(name);
+
+            return element;
+        }
+    }, {
+        key: 'defineState',
+        value: function defineState(stateDefinition) {
+            var _this2 = this;
+
+            this.__state || (this.__state = {});
+            this.state = (0, _readOnly.readOnly)(this.__state);
+            Object.getOwnPropertyNames(stateDefinition).forEach(function (property) {
+                var setters = stateDefinition[property](_this2.__state);
+                for (var i = 0; i < setters.length; i += 2) {
+                    _this2.addEventListener(setters[i], setters[i + 1]);
+                }
+            });
+
+            this.trigger(new DefinedEvent());
+        }
+    }]);
+
+    return NameSpace;
+}(_eventPool.EventPool);
+
+var NameSpaceRoot = new NameSpace('data');
+
+function getNameSpaceByPath(path) {
+    var poolPath = path.split('/').slice(1);
+    var currentPath = 'data';
+    var eventPool = NameSpaceRoot;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = poolPath[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var poolName = _step.value;
+
+            currentPath += '/' + poolName;
+            if (!eventPool.children[poolName]) {
+                var newPool = new NameSpace(poolName, currentPath);
+                eventPool.children[poolName] = newPool;
+                eventPool.element.appendChild(newPool.element);
+            }
+            eventPool = eventPool.children[poolName];
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    return eventPool;
+};
+
+function detachEventPool(path) {
+    var poolPath = path.split('/').slice(1);
+    var eventPool = NameSpaceRoot;
+    var poolToDelete = poolPath.pop();
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+        for (var _iterator2 = poolPath[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var poolName = _step2.value;
+
+            if (!eventPool.children[poolName]) {
+                return false;
+            }
+            eventPool = eventPool.children[poolName];
+        }
+    } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+            }
+        } finally {
+            if (_didIteratorError2) {
+                throw _iteratorError2;
+            }
+        }
+    }
+
+    if (eventPool.children[poolToDelete]) {
+        delete eventPool.children[poolToDelete];
+    }
+
+    return true;
+};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var GC = {
+    components: new Map(),
+    listeners: new Map(),
+    observers: new Map(),
+    elementAttribute: 'fiber-component-id'
+};
+
+GC.init = function () {
+    this.observe(document.body);
+    this.init = false;
+};
+
+GC.observe = function (element) {
+    var _this = this;
+
+    var observerId = (this.observers.size + 1).toString();
+
+    if (element._GC_observerId) {
+        return;
+    }
+
+    element._GC_observerId = observerId;
+
+    var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.removedNodes) {
+                mutation.removedNodes.forEach(function (node) {
+                    _this.removeNode(node);
+                });
+            }
+        });
+    });
+
+    observer.observe(element, { childList: true, subtree: true });
+
+    this.observers.set(observerId, {
+        element: element,
+        observer: observer
+    });
+};
+
+GC.removeNode = function (element) {
+    var _this2 = this;
+
+    if (!element.querySelectorAll) return;
+
+    if (element._GC_observerId) {
+        return;
+    }
+
+    var processNode = function processNode(view) {
+        var componentId = view.attributes[_this2.elementAttribute].value;
+        var component = _this2.components.get(componentId);
+
+        component && _this2.destroy(component);
+    };
+
+    element.querySelectorAll('[' + this.elementAttribute + ']').forEach(processNode);
+    if (element.attributes[this.elementAttribute]) {
+        processNode(element);
+    }
+};
+
+GC.registerComponent = function (component) {
+    component.componentId = generateComponentId();
+    this.components.set(component.componentId, component);
+    this.listeners.set(component.componentId, []);
+
+    component.view.setAttribute(this.elementAttribute, component.componentId);
+    GC.init && GC.init();
+};
+
+GC.registerListener = function (component, element, event, callback) {
+    if (!this.listeners.has(component.componentId)) return;
+
+    this.listeners.get(component.componentId).push({
+        element: element,
+        eventName: extractEventName(event),
+        callback: callback
+    });
+};
+
+GC.destroy = function (component) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = this.listeners.get(component.componentId)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var listener = _step.value;
+
+            listener.element.removeEventListener(listener.eventName, listener.callback);
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    component.view = null;
+    this.components.delete(component.componentId);
+    this.listeners.delete(component.componentId);
+};
+
+exports.default = GC;
+
+
+function extractEventName(event) {
+    return typeof event == 'string' ? event : event.EventName;
+}
+
+var __id = 0;
+// let __fullId = '';
+function generateComponentId() {
+    return (++__id).toString();
+    // if(__id > 122) {
+    //     __fullId = incrementStr(__fullId);
+    //     __id = 97;
+    // }
+    // return __fullId + String.fromCharCode(__id);
+}
+
+function incrementStr(str) {
+    for (var i = str.length - 1; i >= 0; i--) {
+        if (str[i] != 'z') {
+            return str.substr(0, i) + String.fromCharCode(str.charCodeAt(i) + 1) + 'a'.repeat(str.length - i - 1);
+        }
+    }
+    return 'a'.repeat(str.length + 1);
+}
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Event = undefined;
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.defineEventType = defineEventType;
+exports.eventOfType = eventOfType;
+exports.basicEvent = basicEvent;
+exports.defineEvent = defineEvent;
+
+var _readOnly = __webpack_require__(6);
+
+var _readOnly2 = _interopRequireDefault(_readOnly);
+
+var _domain = __webpack_require__(12);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var eventId = 0;
+
+var Event = function () {
+    function Event() {
+        _classCallCheck(this, Event);
+
+        this.name = this.constructor.EventName;
+    }
+
+    _createClass(Event, [{
+        key: 'event',
+        value: function event() {
+            if (!this.originalEvent) {
+                this.originalEvent = new CustomEvent(this.name, {
+                    detail: this,
+                    bubbles: !this.constructor._cancelBubble,
+                    cancelable: true
+                });
+            }
+            return this.originalEvent;
+        }
+    }, {
+        key: 'stopPropagation',
+        value: function stopPropagation() {
+            this.originalEvent && this.originalEvent.stopPropagation();
+        }
+    }, {
+        key: 'preventDefault',
+        value: function preventDefault() {
+            this.originalEvent && this.originalEvent.preventDefault();
+        }
+    }], [{
+        key: 'bubbles',
+        value: function bubbles(_bubbles) {
+            this._cancelBubble = !_bubbles;
+            return this;
+        }
+    }, {
+        key: 'alias',
+        value: function alias(name) {
+            this.EventName = name;
+            return this;
+        }
+    }, {
+        key: 'on',
+        value: function on(namespace) {
+            return {
+                namespace: namespace,
+                event: this
+            };
+        }
+    }]);
+
+    return Event;
+}();
+
+exports.Event = Event;
+
+var EventAttributeError = function (_Error) {
+    _inherits(EventAttributeError, _Error);
+
+    function EventAttributeError(event, name, value, ParamType) {
+        _classCallCheck(this, EventAttributeError);
+
+        if (ParamType) {
+            var _this = _possibleConstructorReturn(this, (EventAttributeError.__proto__ || Object.getPrototypeOf(EventAttributeError)).call(this, 'Type mismatch for Event \'' + event.name + '\' for attribute \'' + name + '\''));
+        } else {
+            var _this = _possibleConstructorReturn(this, (EventAttributeError.__proto__ || Object.getPrototypeOf(EventAttributeError)).call(this, 'Unexpected parameter for Event \'' + event.name + '\''));
+        }
+        _this.event = event;
+        _this.name = name;
+        _this.value = value;
+        _this.type = ParamType;
+        return _possibleConstructorReturn(_this);
+    }
+
+    return EventAttributeError;
+}(Error);
+
+function defineEventType(descriptor) {
+    var propNames = Object.getOwnPropertyNames(descriptor);
+    var DefinedEventClass = function (_Event) {
+        _inherits(DefinedEventClass, _Event);
+
+        function DefinedEventClass() {
+            _classCallCheck(this, DefinedEventClass);
+
+            var _this2 = _possibleConstructorReturn(this, (DefinedEventClass.__proto__ || Object.getPrototypeOf(DefinedEventClass)).call(this));
+
+            var readonly = new _readOnly2.default(_this2);
+
+            for (var _len = arguments.length, params = Array(_len), _key = 0; _key < _len; _key++) {
+                params[_key] = arguments[_key];
+            }
+
+            for (var i = 0; i < params.length; i++) {
+                var paramName = propNames[i];
+                if (paramName === undefined || descriptor[paramName] === undefined) {
+                    throw new EventAttributeError(_this2, paramName, params[i]);
+                }
+
+                var _Optional$from = _domain.Optional.from(descriptor[paramName]),
+                    _Optional$from2 = _slicedToArray(_Optional$from, 2),
+                    optional = _Optional$from2[0],
+                    ParamType = _Optional$from2[1];
+
+                readonly.addProperty(paramName);
+
+                if (optional && (params[i] === undefined || params[i] === null)) {
+                    readonly.modifier[paramName] = params[i];
+                } else if (ParamType.name === 'Mixed') {
+                    readonly.modifier[paramName] = params[i];
+                } else if (ParamType == Number || ParamType == String || ParamType == Boolean) {
+                    readonly.modifier[paramName] = new ParamType(params[i]).valueOf();
+                } else if (ParamType instanceof Object && !(params[i] instanceof ParamType)) {
+                    throw new EventAttributeError(_this2, paramName, params[i], ParamType);
+                } else {
+                    readonly.modifier[paramName] = params[i];
+                }
+            }
+            return _this2;
+        }
+
+        return DefinedEventClass;
+    }(Event);
+    return DefinedEventClass;
+};
+
+function eventOfType(EventType) {
+    return function (_EventType) {
+        _inherits(_class, _EventType);
+
+        function _class() {
+            _classCallCheck(this, _class);
+
+            return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+        }
+
+        return _class;
+    }(EventType).alias('Event' + ++eventId);
+};
+
+function basicEvent(name) {
+    return function (_Event2) {
+        _inherits(_class2, _Event2);
+
+        function _class2() {
+            _classCallCheck(this, _class2);
+
+            return _possibleConstructorReturn(this, (_class2.__proto__ || Object.getPrototypeOf(_class2)).apply(this, arguments));
+        }
+
+        return _class2;
+    }(Event).alias(name || 'Event' + ++eventId);
+};
+
+function defineEvent(EventType, alias) {
+    return eventOfType(EventType).alias(alias);
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _componentInterface = __webpack_require__(5);
+
+var _componentInterface2 = _interopRequireDefault(_componentInterface);
+
+var _eventPool = __webpack_require__(0);
+
+var _namespace = __webpack_require__(1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DataComponent = function (_ComponentInterface) {
+    _inherits(DataComponent, _ComponentInterface);
+
+    function DataComponent() {
+        _classCallCheck(this, DataComponent);
+
+        return _possibleConstructorReturn(this, (DataComponent.__proto__ || Object.getPrototypeOf(DataComponent)).apply(this, arguments));
+    }
+
+    _createClass(DataComponent, [{
+        key: 'namespace',
+        get: function get() {
+            return this.eventPool;
+        }
+    }], [{
+        key: 'attachTo',
+        value: function attachTo(eventPool) {
+            var instance = new this();
+
+            instance.eventPool = eventPool instanceof _eventPool.EventPool ? eventPool : (0, _namespace.getNameSpaceByPath)(eventPool);
+
+            instance.listen();
+
+            return instance;
+        }
+    }]);
+
+    return DataComponent;
+}(_componentInterface2.default);
+
+exports.default = DataComponent;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _eventPool = __webpack_require__(0);
+
+var _namespace = __webpack_require__(1);
+
+var _eventFlow = __webpack_require__(8);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ComponentInterface = function () {
+    function ComponentInterface() {
+        _classCallCheck(this, ComponentInterface);
+
+        for (var _len = arguments.length, params = Array(_len), _key = 0; _key < _len; _key++) {
+            params[_key] = arguments[_key];
+        }
+
+        this.init.apply(this, params);
+    }
+
+    /**
+    * called from component's constructor to initialize component instance
+    * parameters are passed from the contrusctor or from the attachTo call
+    -- keeping it for now but so far it seems unecessary --
+    */
+
+
+    _createClass(ComponentInterface, [{
+        key: 'init',
+        value: function init() {}
+
+        /**
+        * called after NameSpace/DOM is attached to the component to set up
+        * its listeners
+        * never gets any parameters
+        */
+
+    }, {
+        key: 'listen',
+        value: function listen() {}
+
+        /**
+        * access namespaces/flows from the component
+        */
+
+    }, {
+        key: 'on',
+        value: function on(target) {
+            if (target instanceof _eventFlow.EventFlowType) {
+                return this.flow(target);
+            }
+
+            return target instanceof _eventPool.EventPool || target instanceof _eventFlow.EventFlow ? target : (0, _namespace.getNameSpaceByPath)(target);
+        }
+
+        /**
+        * starts a new flow of the given FlowType
+        */
+
+    }, {
+        key: 'flow',
+        value: function flow(flowType) {
+            return new _eventFlow.EventFlow(flowType);
+        }
+    }]);
+
+    return ComponentInterface;
+}();
+
+exports.default = ComponentInterface;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+exports.readOnly = readOnly;
+
+var _clone = __webpack_require__(7);
+
+var _clone2 = _interopRequireDefault(_clone);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function readOnly(original) {
+    return original instanceof Object ? new Proxy(original, {
+        get: function get(target, property) {
+            return readOnly(target[property]);
+        },
+        set: function set() {
+            return true;
+        }
+    }) : original;
+}
+
+var ReadOnly = function () {
+    function ReadOnly(reader) {
+        _classCallCheck(this, ReadOnly);
+
+        this.reader = reader || {};
+        this.modifier = {};
+    }
+
+    _createClass(ReadOnly, [{
+        key: 'addProperty',
+        value: function addProperty(name) {
+            var _this = this;
+
+            this.modifier[name] = null;
+            Object.defineProperty(this.reader, name, {
+                get: function get() {
+                    return (0, _clone2.default)(_this.modifier[name]);
+                },
+                // get: () => readOnly(this.modifier[name]),
+                enumerable: true
+            });
+        }
+    }]);
+
+    return ReadOnly;
+}();
+
+/*
+    Interesting learning is in Chrome, Proxies are super fast so using them
+    instead of cloning boosts the performance.
+    However in Safari and Firefox Proxies seem to be lagging behind and make
+    the app slower...
+
+    For now I'm going to stick to the cloning implementation until this changes.
+*/
+
+exports.default = ReadOnly;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = clone;
+function clone(obj) {
+    if (!(obj instanceof Object) || obj instanceof Function) {
+        return obj;
+    }
+    if (obj instanceof Array) {
+        return obj.map(function (item) {
+            return clone(item);
+        });
+    }
+    if (obj instanceof Number || obj instanceof String || obj instanceof Date || obj instanceof RegExp || obj instanceof Boolean) {
+        return new obj.constructor(obj);
+    }
+    if (obj.clone instanceof Function) {
+        return obj.clone();
+    }
+
+    var copied = {};
+
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = Object.getOwnPropertyNames(obj)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var key = _step.value;
+
+            copied[key] = clone(obj[key]);
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    return copied;
+}
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.EventFlow = exports.EventFlowType = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _event = __webpack_require__(3);
+
+var _eventPool = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var EventFlowType = exports.EventFlowType = function EventFlowType() {
+    _classCallCheck(this, EventFlowType);
+
+    for (var _len = arguments.length, steps = Array(_len), _key = 0; _key < _len; _key++) {
+        steps[_key] = arguments[_key];
+    }
+
+    this.steps = steps;
+
+    steps.forEach(function (step) {
+        if (!(step.namespace instanceof _eventPool.EventPool && step.event.EventName)) {
+            throw new Error('wrong argument for Flow step!');
+        }
+    });
+};
+
+var EventFlow = exports.EventFlow = function () {
+    function EventFlow(flowType) {
+        var _this = this;
+
+        _classCallCheck(this, EventFlow);
+
+        this.steps = flowType.steps;
+        this.currentEvent = null;
+        this.currentNameSpace = null;
+        this.promise = new Promise(function (resolve, reject) {
+            _this.resolve = resolve;
+            _this.reject = reject;
+        });
+    }
+
+    _createClass(EventFlow, [{
+        key: 'trigger',
+        value: function trigger(fiberEvent) {
+            var step = this.steps.shift();
+
+            if (!step) {
+                this.reject(fiberEvent);
+            }
+            if (!fiberEvent instanceof step.event) {
+                this.reject(fiberEvent);
+            }
+
+            this.currentEvent = fiberEvent;
+            this.currentNameSpace = step.namespace;
+
+            fiberEvent.flow = this;
+
+            this.currentNameSpace.trigger(fiberEvent);
+
+            if (!this.steps.length) {
+                this.resolve(this);
+            }
+
+            return this.promise;
+        }
+    }, {
+        key: 'listen',
+        value: function listen() {
+            throw new Error("You can't set listeners on an EventFlow! (yet?)");
+        }
+    }]);
+
+    return EventFlow;
+}();
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _componentInterface = __webpack_require__(5);
+
+var _componentInterface2 = _interopRequireDefault(_componentInterface);
+
+var _eventPool = __webpack_require__(0);
+
+var _namespace = __webpack_require__(1);
+
+var _DOM = __webpack_require__(10);
+
+var _DOM2 = _interopRequireDefault(_DOM);
+
+var _gc = __webpack_require__(2);
+
+var _gc2 = _interopRequireDefault(_gc);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UIComponent = function (_ComponentInterface) {
+    _inherits(UIComponent, _ComponentInterface);
+
+    function UIComponent() {
+        _classCallCheck(this, UIComponent);
+
+        return _possibleConstructorReturn(this, (UIComponent.__proto__ || Object.getPrototypeOf(UIComponent)).apply(this, arguments));
+    }
+
+    _createClass(UIComponent, [{
+        key: 'render',
+        value: function render() {
+            if (this.constructor.template) {
+                this.view = _DOM2.default.render(this.constructor.template);
+            }
+
+            this.listen();
+
+            return this.view;
+        }
+    }, {
+        key: 'getNameSpaceByPath',
+        value: function getNameSpaceByPath() {
+            return this.eventPool || (this.eventPool = _eventPool.EventPool.forComponent(this));
+        }
+    }, {
+        key: 'on',
+        value: function on(target) {
+            target = _get(UIComponent.prototype.__proto__ || Object.getPrototypeOf(UIComponent.prototype), 'on', this).call(this, target);
+
+            return target instanceof _eventPool.EventPool ? new EventPoolAccessor(this, target) : target;
+        }
+    }, {
+        key: 'ui',
+        value: function ui(query) {
+            var element = _DOM2.default.getElement(query || this.view, this.view);
+            return element ? new EventPoolAccessor(this, _eventPool.EventPool.forElement(element, this)) : null;
+        }
+    }, {
+        key: 'view',
+        get: function get() {
+            return this._view;
+        },
+        set: function set(element) {
+            this._view = element;
+            this.getNameSpaceByPath().element = element;
+            if (element) {
+                _gc2.default.registerComponent(this);
+            }
+        }
+    }, {
+        key: 'namespace',
+        get: function get() {
+            return this.getNameSpaceByPath();
+        }
+    }], [{
+        key: 'elementName',
+        value: function elementName() {
+            return this.name.replace('Component', '').replace(/[A-Z]/g, '-$&').toLowerCase().substr(1);
+        }
+    }, {
+        key: 'withTemplate',
+        value: function withTemplate(template) {
+            return function (_ref) {
+                _inherits(_class, _ref);
+
+                function _class() {
+                    _classCallCheck(this, _class);
+
+                    return _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+                }
+
+                _createClass(_class, null, [{
+                    key: '__setTemplate',
+                    value: function __setTemplate(template) {
+                        this.template = template;
+                        return this;
+                    }
+                }]);
+
+                return _class;
+            }(this).__setTemplate(template);
+        }
+    }, {
+        key: 'attachTo',
+        value: function attachTo(element) {
+            element = _DOM2.default.getElement(element);
+
+            for (var _len = arguments.length, params = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                params[_key - 1] = arguments[_key];
+            }
+
+            var instance = new (Function.prototype.bind.apply(this, [null].concat(params)))();
+            instance._attached = true;
+
+            var renderedTemplate = this.template ? _DOM2.default.render(this.template) : null;
+
+            if (!renderedTemplate) {
+                instance.view = element;
+            } else if (renderedTemplate.tagName == element.tagName) {
+                element.replaceWith(renderedTemplate);
+                instance.view = renderedTemplate;
+            } else {
+                instance.view = element;
+                instance.view.append(renderedTemplate);
+            }
+            instance.listen();
+
+            return instance;
+        }
+    }, {
+        key: 'populate',
+        value: function populate(parentElement) {
+            var _this3 = this;
+
+            if (!parentElement instanceof Element) {
+                return false;
+            }
+
+            var elements = parentElement.querySelectorAll(this.elementName());
+            if (parentElement.tagName.toLowerCase() == this.elementName()) {
+                elements = [parentElement];
+            }
+            elements.forEach(function (element) {
+                _this3.attachTo(element);
+            });
+
+            return elements;
+        }
+    }]);
+
+    return UIComponent;
+}(_componentInterface2.default);
+
+var EventPoolAccessor = function () {
+    function EventPoolAccessor(component, pool) {
+        _classCallCheck(this, EventPoolAccessor);
+
+        this.component = component;
+        this.eventPool = pool;
+    }
+
+    _createClass(EventPoolAccessor, [{
+        key: 'listen',
+        value: function listen() {
+            var _this4 = this,
+                _arguments = arguments;
+
+            var _loop = function _loop(i) {
+                var listener = _this4.eventPool.addEventListener(_arguments.length <= i ? undefined : _arguments[i], _arguments.length <= i + 1 ? undefined : _arguments[i + 1]);
+                listener.events.forEach(function (event) {
+                    return _gc2.default.registerListener(_this4.component, _this4.eventPool.element, event, listener.callback);
+                });
+            };
+
+            for (var i = 0; i < arguments.length; i += 2) {
+                _loop(i);
+            }
+        }
+    }, {
+        key: 'trigger',
+        value: function trigger(event) {
+            return this.eventPool.trigger(event);
+        }
+    }, {
+        key: 'triggerSync',
+        value: function triggerSync(event) {
+            return this.eventPool.triggerSync(event);
+        }
+    }]);
+
+    return EventPoolAccessor;
+}();
+
+exports.default = UIComponent;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _gc = __webpack_require__(2);
+
+var _gc2 = _interopRequireDefault(_gc);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var DOM = {};
+
+DOM.getElement = function (element, root) {
+    return typeof element == 'string' ? (root || document).querySelector(element) : element;
+};
+
+DOM.render = function (template, wrapper) {
+    if (template instanceof Element) {
+        return template;
+    }
+    var parent = document.createElement(wrapper || 'div');
+    parent.innerHTML = template;
+    if (!wrapper && parent.childElementCount == 1) {
+        return parent.firstElementChild;
+    }
+
+    return parent;
+};
+
+DOM.renderWithComponents = function (template) {
+    for (var _len = arguments.length, components = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        components[_key - 1] = arguments[_key];
+    }
+
+    template = DOM.render(template);
+
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = components[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var component = _step.value;
+
+            component.populate(template);
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    return template;
+};
+
+DOM.detach = function (element) {
+    _gc2.default.observe(element);
+    element.remove();
+};
+
+exports.default = DOM;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _gc = __webpack_require__(2);
+
+var _gc2 = _interopRequireDefault(_gc);
+
+var _dataComponent = __webpack_require__(4);
+
+var _dataComponent2 = _interopRequireDefault(_dataComponent);
+
+var _uiComponent = __webpack_require__(9);
+
+var _uiComponent2 = _interopRequireDefault(_uiComponent);
+
+var _namespace = __webpack_require__(1);
+
+var _event = __webpack_require__(3);
+
+var _eventFlow = __webpack_require__(8);
+
+var _clone = __webpack_require__(7);
+
+var _clone2 = _interopRequireDefault(_clone);
+
+var _DOM = __webpack_require__(10);
+
+var _DOM2 = _interopRequireDefault(_DOM);
+
+var _debugger = __webpack_require__(13);
+
+var _debugger2 = _interopRequireDefault(_debugger);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Fiber = {};
+
+// garbage Collector
+
+Fiber.GC = _gc2.default;
+
+// DataComponent
+
+Fiber.DataComponent = _dataComponent2.default;
+
+// UIComponent
+
+Fiber.UIComponent = _uiComponent2.default;
+
+// eventPool
+
+Fiber.namespace = _namespace.getNameSpaceByPath;
+Fiber.NameSpace = {
+    create: _namespace.getNameSpaceByPath,
+    Defined: _namespace.DefinedEvent
+};
+
+// events
+
+Fiber.Event = _event.Event;
+Fiber.defineEvent = _event.defineEvent;
+Fiber.defineEventType = _event.defineEventType;
+Fiber.basicEvent = _event.basicEvent;
+
+// event-flows
+
+Fiber.EventFlow = {
+    define: function define() {
+        for (var _len = arguments.length, steps = Array(_len), _key = 0; _key < _len; _key++) {
+            steps[_key] = arguments[_key];
+        }
+
+        return new (Function.prototype.bind.apply(_eventFlow.EventFlowType, [null].concat(steps)))();
+    }
+};
+
+// clone
+
+Fiber.clone = _clone2.default;
+
+// DOM
+
+Fiber.DOM = _DOM2.default;
+
+// Debugger
+
+Fiber.Debugger = _debugger2.default;
+
+// System events
+Fiber.System = (0, _namespace.getNameSpaceByPath)('data/system');
+Fiber.System.Ready = (0, _event.basicEvent)('System:Ready');
+var System = Fiber.DataComponent.attachTo(Fiber.System);
+
+Fiber.app = function (startupScript) {
+    startupScript();
+    System.on(Fiber.System).trigger(new Fiber.System.Ready());
+};
+
+exports.default = Fiber;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Optional = exports.Optional = function Optional(value) {
+  return { $isOptional: true, value: value };
+};
+Optional.from = function (obj) {
+  return obj.$isOptional ? [true, obj.value] : [false, obj];
+};
+
+var Mixed = exports.Mixed = function Mixed() {
+  _classCallCheck(this, Mixed);
+};
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _componentInterface = __webpack_require__(5);
+
+var _componentInterface2 = _interopRequireDefault(_componentInterface);
+
+var _uiComponent = __webpack_require__(9);
+
+var _uiComponent2 = _interopRequireDefault(_uiComponent);
+
+var _eventPool = __webpack_require__(0);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Debugger = {};
+var actor = null;
+
+var boldStyle = 'font-weight: bold; color: black;';
+var triggeredStyle = 'font-weight: bold; color: navy;';
+var eventStyle = 'font-weight: normal; color: red;';
+var componentStyle = 'font-weight: bold; color: #2D602D;';
+var handlerStyle = 'font-weight: bold; color: #d9534f;';
+var normalStyle = 'font-weight: normal;';
+
+Debugger.init = function () {
+
+    // .on(), .ui() and .flow()
+    _componentInterface2.default.prototype.$$on = _componentInterface2.default.prototype.on;
+    _componentInterface2.default.prototype.on = function (path) {
+        actor = this;
+        return this.$$on(path);
+    };
+    _uiComponent2.default.prototype.$$ui = _uiComponent2.default.prototype.ui;
+    _uiComponent2.default.prototype.ui = function (path) {
+        actor = this;
+        return this.$$ui(path);
+    };
+    _componentInterface2.default.prototype.$$flow = _componentInterface2.default.prototype.flow;
+    _componentInterface2.default.prototype.flow = function (eventFlow) {
+        actor = this;
+        return this.$$flow(eventFlow);
+    };
+
+    // EventPool
+    _eventPool.EventPool.prototype.$$triggerSync = _eventPool.EventPool.prototype.triggerSync;
+    _eventPool.EventPool.prototype.triggerSync = function (fiberEvent) {
+        var poolName = this.name && 'data/' + this.name || 'DOM';
+        var actorName = actor.constructor.name;
+        if (actorName.length == 1) {
+            actorName = 'FiberJS';
+        }
+
+        console.log(tab() + '%c' + fiberEvent.name + ' %ctriggered on %c' + poolName + '%c by %c' + actorName, triggeredStyle, normalStyle, boldStyle, normalStyle, boldStyle);
+        if (Debugger.showEvents) {
+            console.log(fiberEvent);
+        }
+        return this.$$triggerSync(fiberEvent);
+    };
+
+    _eventPool.EventPool.prototype.$$addEventListener = _eventPool.EventPool.prototype.addEventListener;
+    _eventPool.EventPool.prototype.addEventListener = function (fiberEvent, handler) {
+        var nativeEvent = typeof fiberEvent == 'string';
+        var eventName = nativeEvent ? fiberEvent : fiberEvent.EventName;
+        var boundActor = actor.constructor.name;
+        var boundView = actor.view;
+
+        var debugHandler = function debugHandler(event) {
+            if (nativeEvent) {
+                console.log(tab() + '%c' + eventName.replace(' ', '/') + '%c was triggered on ' + boundActor, triggeredStyle, normalStyle);
+            } else {
+                boundView && Debugger.showView ? console.log('' + tab() + boundActor + ' listening for %c' + eventName, boundView, eventStyle) : console.log(tab() + '%c' + boundActor + '%c listening for %c' + eventName, componentStyle, normalStyle, eventStyle);
+            }
+            console.log(tab() + '%c' + handlerToString(handler) + '%c is called by ' + boundActor, handlerStyle, normalStyle);
+            return handler(event);
+        };
+        return this.$$addEventListener(fiberEvent, debugHandler);
+    };
+};
+
+function handlerToString(handler) {
+    if (handler.name) {
+        return handler.name;
+    }
+    try {
+        return handler.toString().match(/_this[0-9][.]([^(]*)[(]/).pop();
+    } catch (e) {
+        return '[inline method]';
+    }
+}
+
+function tab() {
+    return " "; //.repeat(EventPool.depth * 4);
+}
+
+exports.default = Debugger;
+
+/***/ })
+/******/ ]);
+});
 
 /***/ }),
 /* 1 */
@@ -864,9 +2441,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var todoPatch = function todoPatch(view) {
     return {
         title: function title(_title) {
-            view.$.label.innerHTML = _title;
+            view.$.label.innerHTML = (0, _marked2.default)(_title).replace(/<p>|<\/p>/g, '');
             view.$.editor.value = _title;
         },
+        // title : [ view.$.label, view.$.editor ],
         state: function state(_state, todo) {
             view.className = _state;
             view.$.toggle.checked = todo.completed;
@@ -1975,7 +3553,7 @@ function escape(html, encode) {
 }
 
 function unescape(html) {
-	// explicitly match decimal, hex, and named HTML entities
+	// explicitly match decimal, hex, and named HTML entities 
   return html.replace(/&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/g, function(_, n) {
     n = n.toLowerCase();
     if (n === 'colon') return ':';

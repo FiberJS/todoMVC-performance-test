@@ -1,4 +1,5 @@
-
+var sampleSizes = [ 10, 50, 100, 500 ];
+var sampleSizeStep;
 var runs = [],
     res = document.getElementById('results'),
     timesRan = 0,
@@ -95,7 +96,7 @@ function startTest() {
             if (!results)
                 return;
 
-            console.log(results)
+            // console.log(results);
 
             runs.push(measuredValues)
             timesRan++
@@ -111,11 +112,13 @@ function startTest() {
     });
 
     var currentState = null;
-    function callNextStep(state) {
+    function callNextStep(state, promise) {
         runner.step(state).then(function (newState) {
             currentState = newState;
             if (newState)
-                callNextStep(newState);
+                callNextStep(newState, promise);
+            else if(promise)
+                promise.resolve(true);
         });
     }
 
@@ -123,13 +126,29 @@ function startTest() {
     document.body.appendChild(createUIForSuites(Suites,
         function () { runner.step(currentState).then(function (state) { currentState = state; }); },
         function () {
-            document.querySelectorAll('.ran').forEach(function(elem) {
-              elem.className = '';
-            });
-            var analysis = document.getElementById("analysis");
-            analysis.style.display = 'none';
-            callNextStep(currentState);
+            document.getElementById("analysis").style.display = 'none';
+
+            sampleSizeStep = 0;
+            runTests();
         }));
+
+    function runTests() {
+        document.querySelectorAll('.ran').forEach(function(elem) {
+          elem.className = '';
+        });
+        var promise = new SimplePromise;
+        numberOfItemsToAdd = sampleSizes[sampleSizeStep];
+
+        callNextStep(currentState, promise);
+
+        promise.then(function() {
+            if(++sampleSizeStep < sampleSizes.length) {
+                runTests();
+            } else {
+                document.getElementById("analysis").style.display = 'block';
+            }
+        });
+    }
 
     function reportAverage () {
         var results = {}
@@ -161,22 +180,31 @@ function drawChart(results) {
                      2]);
 
     var runWord = "run" + (runs.length > 1 ? "s" : "");
-    var title = "Average time in milliseconds over " + runs.length +
-        " " + runWord + " (lower is better)";
+    var title = "Runtimes in milliseconds (lower is better)";
 
     var options = {
-	title: "TodoMVC Benchmark",
+	title: "TodoMVC Benchmark [" + numberOfItemsToAdd + " items in " + browser() + "]",
 	width: 600,
-	height: 400,
+	height: 260,
         legend: { position: "none" },
         backgroundColor: 'transparent',
         hAxis: {title: title}
     };
-    var analysis = document.getElementById("analysis");
-    analysis.style.display = 'block';
     var barchart = document.getElementById("barchart_values");
-    var chart = new google.visualization.BarChart(barchart);
+    var newChart = document.createElement('div');
+    barchart.appendChild(newChart);
+    var chart = new google.visualization.BarChart(newChart);
     chart.draw(view, options);
 }
 
 window.addEventListener('load', startTest);
+
+function browser() {
+    if(navigator.userAgent.indexOf("Chrome") != -1 ) {
+        return 'Chrome';
+    } else if(navigator.userAgent.indexOf("Safari") != -1) {
+        return 'Safari';
+    } else if(navigator.userAgent.indexOf("Firefox") != -1 ) {
+         return 'Firefox';
+    }
+}

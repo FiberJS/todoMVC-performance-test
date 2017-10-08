@@ -1,4 +1,4 @@
-var numberOfItemsToAdd = 300;
+var numberOfItemsToAdd = 100;
 var Suites = [];
 
 function addItems(newTodo, contentWindow) {
@@ -32,7 +32,7 @@ function addItems(newTodo, contentWindow) {
 
 function generalTests() {
   return [
-    new BenchmarkTestStep('Adding ' + numberOfItemsToAdd + ' Items', function (newTodo, contentWindow, contentDocument) {
+    new BenchmarkTestStep('Adding items', function (newTodo, contentWindow, contentDocument) {
       addItems(newTodo, contentWindow);
       return atLeast(contentDocument, '.toggle', numberOfItemsToAdd);
     }),
@@ -43,23 +43,16 @@ function generalTests() {
 
       return atLeast(contentDocument, '.toggle:checked', numberOfItemsToAdd);
     }),
-    // new BenchmarkTestStep('Changing View', function (newTodo, contentWindow, contentDocument) {
-    //   contentDocument.querySelectorAll('#filters a, .filters a')[1].click();
-    //
-    //   return atMost(contentDocument, '.toggle', numberOfItemsToAdd);
-    // }),
-    // new BenchmarkTestStep('Changing views back', function (newTodo, contentWindow, contentDocument) {
-    //   contentDocument.querySelectorAll('#filters a, .filters a')[0].click();
-    //
-    //   return atLeast(contentDocument, '.toggle', numberOfItemsToAdd);
-    // }),
-    // new BenchmarkTestStep('Completing other half of the items', function (newTodo, contentWindow, contentDocument) {
-    //   var checkboxes = contentDocument.querySelectorAll('.toggle');
-    //   for (var i = checkboxes.length / 2; i < checkboxes.length; i++)
-    //   checkboxes[i].click();
-    //
-    //   return atLeast(contentDocument, '.toggle:checked', numberOfItemsToAdd);
-    // }),
+    new BenchmarkTestStep('Changing View', function (newTodo, contentWindow, contentDocument) {
+      contentDocument.querySelectorAll('#filters a, .filters a')[1].click();
+
+      return atMost(contentDocument, '.toggle', numberOfItemsToAdd);
+    }),
+    new BenchmarkTestStep('Changing View back', function (newTodo, contentWindow, contentDocument) {
+      contentDocument.querySelectorAll('#filters a, .filters a')[0].click();
+
+      return atLeast(contentDocument, '.toggle', numberOfItemsToAdd);
+    }),
     new BenchmarkTestStep('Deleting all items', function (newTodo, contentWindow, contentDocument) {
       var deleteButtons = contentDocument.querySelectorAll('.destroy');
       for (var i = 0; i < deleteButtons.length; i++)
@@ -126,11 +119,10 @@ Suites.push({
 });
 
 Suites.push({
-  name: 'React + Redux',
+  name: 'React+Redux',
   url: 'todomvc/redux/index.html',
   version: '(15.5 + 3.5.2)',
   prepare: function (runner, contentWindow, contentDocument) {
-    // contentWindow.Utils.store = function () {}
     return runner.waitForElement('.new-todo').then(function (element) {
       element.focus();
       return element;
