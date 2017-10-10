@@ -9,13 +9,6 @@ function addItems(newTodo, contentWindow) {
     newTodo.value = 'Something to do ' + i;
     newTodo.dispatchEvent(inputEvent);
 
-    var keypressEvent = document.createEvent('Event');
-    keypressEvent.initEvent('keypress', true, true);
-    keypressEvent.which = 13;
-    keypressEvent.keyCode = 13;
-    keypressEvent.charCode = 13;
-    newTodo.dispatchEvent(keypressEvent)
-
     var keydownEvent = document.createEvent('Event');
     keydownEvent.initEvent('keydown', true, true);
     keydownEvent.which = 13;
@@ -27,6 +20,30 @@ function addItems(newTodo, contentWindow) {
       "key": "Enter"
     });
     newTodo.dispatchEvent(keyupEvent);
+
+    var keypressEvent = document.createEvent('Event');
+    keypressEvent.initEvent('keypress', true, true);
+    keypressEvent.keyCode = 13;
+    keypressEvent.charCode = 13;
+    keypressEvent.which = 13;
+    newTodo.dispatchEvent(keypressEvent)
+
+    var keypressEvent2 = new KeyboardEvent("keypress",{
+      "key": "Enter"
+    });
+    newTodo.dispatchEvent(keypressEvent2);
+
+    if(newTodo.form) {
+      var changeEvent = document.createEvent('Event');
+      changeEvent.initEvent('change', true, true);
+      changeEvent.value = 'Something to do ' + i;
+      newTodo.value = 'Something to do ' + i;
+      newTodo.dispatchEvent(changeEvent);
+
+      var submitEvent = document.createEvent('Event');
+      submitEvent.initEvent('submit', true, true);
+      newTodo.form.dispatchEvent(submitEvent);
+    }
   }
 }
 
@@ -103,6 +120,18 @@ Suites.push({
   tests: generalTests()
 });
 
+Suites.push({
+  name: 'Alkali',
+  url: 'todomvc/alkali/index.html',
+  version: '0.10.2',
+  prepare: function (runner, contentWindow, contentDocument) {
+    return runner.waitForElement('#new-todo').then(function (element) {
+      element.focus();
+      return element;
+    });
+  },
+  tests: generalTests()
+});
 
 Suites.push({
   name: 'React',
