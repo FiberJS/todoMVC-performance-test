@@ -21,6 +21,13 @@ function addItems(newTodo, contentWindow) {
     });
     newTodo.dispatchEvent(keyupEvent);
 
+    var keyupEvent2 = document.createEvent('Event');
+    keyupEvent2.initEvent('keyup', true, true);
+    keyupEvent2.which = 13;
+    keyupEvent2.keyCode = 13;
+    keyupEvent2.charCode = 13;
+    newTodo.dispatchEvent(keyupEvent2);
+
     var keypressEvent = document.createEvent('Event');
     keypressEvent.initEvent('keypress', true, true);
     keypressEvent.keyCode = 13;
@@ -100,6 +107,19 @@ Suites.push({
   version: '0.1.0',
   prepare: function (runner, contentWindow, contentDocument) {
     return runner.waitForElement('#new-todo').then(function (element) {
+      element.focus();
+      return element;
+    });
+  },
+  tests: generalTests()
+});
+
+Suites.push({
+  name: 'Vue',
+  url: 'todomvc/vue/index.html',
+  version: '1.0.1',
+  prepare: function (runner, contentWindow, contentDocument) {
+    return runner.waitForElement('.new-todo').then(function (element) {
       element.focus();
       return element;
     });
