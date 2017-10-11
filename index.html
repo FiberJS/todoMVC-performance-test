@@ -40,10 +40,26 @@ nav { position: absolute; right: 10px; top: 10px; }
     <div style="clear: both"></div>
     <div style="margin: 15px; margin-right: 200px;">
       <p>
-          The cost of magic... You can see how <strong>FiberJS</strong>,
-          Backbone, Elm and Mercury outperform React and Angular especially with
+          github: <a href="https://github.com/FiberJS">https://github.com/FiberJS</a>
+      </p>
+      <p>
+          The goal of this performance comparison was to see if FiberJS has issues, memory leaks or is too slow to play with 
+          the "adults". As it turns out its small size and straighforward rendering makes it more than competitive on speed.
+          I recommend running the tests on multiple browsers as they show different results.
+      </p>
+      <p>
+          You can see how smaller frameworks outperform React and Angular especially with
           100+ items. Actually around 1000 and 2000 items they blow up and become
           painfully slow - this why I set the max as 500 items for now.
+      </p>
+      <p>
+          Mercury and Alkali are pretty fast on Chrome. On Firefox and Safari Dom rendering is faster but JS engine is slower,
+          so it shows different results - FiberJS is outperforming all others up until 3-400 items. After that the advantage of
+          "debouncing" DOM rendering efforts works in the favor of Virtual Dom solutions.
+      </p>
+      <p>
+          I would love to see a hybrid solution in place which uses Event Driven Architecture but leverages the power of
+          Virtual DOM and smart "debounced" rendering. So will try to make that happen at some point.
       </p>
       <p>
           Note: Still need to get fresher versions of both Angular2 and React. The Angular2
