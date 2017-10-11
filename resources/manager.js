@@ -1,4 +1,4 @@
-var sampleSizes = [ 10, 50, 100, 500 ];
+var sampleSizes = [ 10, 50, 100, 300 ];
 var sampleSizeStep;
 var runs = [],
     res = document.getElementById('results'),
@@ -152,12 +152,10 @@ function startTest() {
 
     function reportAverage () {
         var results = {}
-        runs.forEach(function (runData) {
-            for (var key in runData) {
-                results[key] = results[key] || 0
-                results[key] += runData[key].total
-            }
-        });
+        var runData = runs[runs.length-1];
+        for (var key in runData) {
+            results[key] = runData[key].total;
+        }
         drawChart(results);
     }
 }
@@ -167,7 +165,7 @@ function drawChart(results) {
     var rawData = [ [ "Project" , "Time", { role: "style"} ] ];
     for (var key in results) {
         var color = key === 'FiberJS' ? 'rgb(140, 217, 217)': 'rgb(140, 217, 140)';
-        rawData.push([ key, Math.round(results[key] / runs.length), color ]);
+        rawData.push([ key, Math.round(results[key]), color ]);
     }
     var data = google.visualization.arrayToDataTable(rawData);
 

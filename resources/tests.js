@@ -4,53 +4,56 @@ var Suites = [];
 function addItems(newTodo, contentWindow) {
   var appView = contentWindow.appView;
   for (var i = 0; i < numberOfItemsToAdd; i++) {
-    var inputEvent = document.createEvent('Event');
-    inputEvent.initEvent('input', true, true);
-    newTodo.value = 'Something to do ' + i;
-    newTodo.dispatchEvent(inputEvent);
+      setTimeout(function(i) {
+          var inputEvent = document.createEvent('Event');
+          inputEvent.initEvent('input', true, true);
+          newTodo.value = 'Something to do ' + i;
+          newTodo.dispatchEvent(inputEvent);
 
-    var keydownEvent = document.createEvent('Event');
-    keydownEvent.initEvent('keydown', true, true);
-    keydownEvent.which = 13;
-    keydownEvent.keyCode = 13;
-    keydownEvent.charCode = 13;
-    newTodo.dispatchEvent(keydownEvent);
+          var keydownEvent = document.createEvent('Event');
+          keydownEvent.initEvent('keydown', true, true);
+          keydownEvent.which = 13;
+          keydownEvent.keyCode = 13;
+          keydownEvent.charCode = 13;
+          newTodo.dispatchEvent(keydownEvent);
 
-    var keyupEvent = new KeyboardEvent("keyup",{
-      "key": "Enter"
-    });
-    newTodo.dispatchEvent(keyupEvent);
+          var keyupEvent = new KeyboardEvent("keyup",{
+            "key": "Enter"
+          });
+          newTodo.dispatchEvent(keyupEvent);
 
-    var keyupEvent2 = document.createEvent('Event');
-    keyupEvent2.initEvent('keyup', true, true);
-    keyupEvent2.which = 13;
-    keyupEvent2.keyCode = 13;
-    keyupEvent2.charCode = 13;
-    newTodo.dispatchEvent(keyupEvent2);
+          var keyupEvent2 = document.createEvent('Event');
+          keyupEvent2.initEvent('keyup', true, true);
+          keyupEvent2.which = 13;
+          keyupEvent2.keyCode = 13;
+          keyupEvent2.charCode = 13;
+          newTodo.dispatchEvent(keyupEvent2);
 
-    var keypressEvent = document.createEvent('Event');
-    keypressEvent.initEvent('keypress', true, true);
-    keypressEvent.keyCode = 13;
-    keypressEvent.charCode = 13;
-    keypressEvent.which = 13;
-    newTodo.dispatchEvent(keypressEvent)
+          var keypressEvent = document.createEvent('Event');
+          keypressEvent.initEvent('keypress', true, true);
+          keypressEvent.keyCode = 13;
+          keypressEvent.charCode = 13;
+          keypressEvent.which = 13;
+          newTodo.dispatchEvent(keypressEvent)
 
-    var keypressEvent2 = new KeyboardEvent("keypress",{
-      "key": "Enter"
-    });
-    newTodo.dispatchEvent(keypressEvent2);
+          var keypressEvent2 = new KeyboardEvent("keypress",{
+            "key": "Enter"
+          });
+          newTodo.dispatchEvent(keypressEvent2);
 
-    if(newTodo.form) {
-      var changeEvent = document.createEvent('Event');
-      changeEvent.initEvent('change', true, true);
-      changeEvent.value = 'Something to do ' + i;
-      newTodo.value = 'Something to do ' + i;
-      newTodo.dispatchEvent(changeEvent);
+          if(newTodo.form) {
+            var changeEvent = document.createEvent('Event');
+            changeEvent.initEvent('change', true, true);
+            changeEvent.value = 'Something to do ' + i;
+            newTodo.value = 'Something to do ' + i;
+            newTodo.dispatchEvent(changeEvent);
 
-      var submitEvent = document.createEvent('Event');
-      submitEvent.initEvent('submit', true, true);
-      newTodo.form.dispatchEvent(submitEvent);
-    }
+            var submitEvent = document.createEvent('Event');
+            submitEvent.initEvent('submit', true, true);
+            newTodo.form.dispatchEvent(submitEvent);
+          }
+      }.bind(this, i), 0);
+
   }
 }
 
@@ -62,8 +65,11 @@ function generalTests() {
     }),
     new BenchmarkTestStep('Completing all items', function (newTodo, contentWindow, contentDocument) {
       var checkboxes = contentDocument.querySelectorAll('.toggle');
-      for (var i = 0; i < checkboxes.length; i++)
-      checkboxes[i].click();
+      for (var i = 0; i < checkboxes.length; i++) {
+          setTimeout(function(target) {
+              target.click();
+          }.bind(this, checkboxes[i]), 0);
+      }
 
       return atLeast(contentDocument, '.toggle:checked', numberOfItemsToAdd);
     }),
@@ -79,8 +85,11 @@ function generalTests() {
     }),
     new BenchmarkTestStep('Deleting all items', function (newTodo, contentWindow, contentDocument) {
       var deleteButtons = contentDocument.querySelectorAll('.destroy');
-      for (var i = 0; i < deleteButtons.length; i++)
-      deleteButtons[i].click();
+      for (var i = 0; i < deleteButtons.length; i++) {
+          setTimeout(function(target) {
+              target.click();
+          }.bind(this, deleteButtons[i]), 0);
+      }
 
       return atMost(contentDocument, '.toggle', 1);
     })
@@ -194,22 +203,9 @@ Suites.push({
   tests: generalTests()
 });
 
-Suites.push({
-  name: 'Elm',
-  url: 'todomvc/elm/index.html',
-  version: '0.12.3 + virtual-dom 0.8',
-  prepare: function (runner, contentWindow, contentDocument) {
-    return runner.waitForElement('#new-todo').then(function (element) {
-      element.focus();
-      return element;
-    });
-  },
-  tests: generalTests()
-});
-
 // Suites.push({
-//   name: 'Elm Incremental Dom',
-//   url: 'todomvc/elm-incremental/index.html',
+//   name: 'Elm',
+//   url: 'todomvc/elm/index.html',
 //   version: '0.12.3 + virtual-dom 0.8',
 //   prepare: function (runner, contentWindow, contentDocument) {
 //     return runner.waitForElement('#new-todo').then(function (element) {
