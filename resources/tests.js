@@ -66,9 +66,7 @@ function generalTests() {
     new BenchmarkTestStep('Completing all items', function (newTodo, contentWindow, contentDocument) {
       var checkboxes = contentDocument.querySelectorAll('.toggle');
       for (var i = 0; i < checkboxes.length; i++) {
-          setTimeout(function(target) {
-              target.click();
-          }.bind(this, checkboxes[i]), 0);
+        checkboxes[i].click();
       }
 
       return atLeast(contentDocument, '.toggle:checked', numberOfItemsToAdd);
@@ -86,9 +84,7 @@ function generalTests() {
     new BenchmarkTestStep('Deleting all items', function (newTodo, contentWindow, contentDocument) {
       var deleteButtons = contentDocument.querySelectorAll('.destroy');
       for (var i = 0; i < deleteButtons.length; i++) {
-          setTimeout(function(target) {
-              target.click();
-          }.bind(this, deleteButtons[i]), 0);
+        deleteButtons[i].click();
       }
 
       return atMost(contentDocument, '.toggle', 1);
@@ -116,6 +112,19 @@ Suites.push({
   version: '0.1.0',
   prepare: function (runner, contentWindow, contentDocument) {
     return runner.waitForElement('#new-todo').then(function (element) {
+      element.focus();
+      return element;
+    });
+  },
+  tests: generalTests()
+});
+
+Suites.push({
+  name: 'Preact',
+  url: 'todomvc/preact/index.html',
+  version: '8.2.6',
+  prepare: function (runner, contentWindow, contentDocument) {
+    return runner.waitForElement('.new-todo').then(function (element) {
       element.focus();
       return element;
     });
