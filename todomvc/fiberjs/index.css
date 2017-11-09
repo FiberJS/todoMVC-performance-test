@@ -158,6 +158,10 @@ label[for='toggle-all'] {
 	border-bottom: none;
 }
 
+#todo-list li.hidden {
+	display: none;
+}
+
 #todo-list li.editing {
 	border-bottom: none;
 	padding: 0;

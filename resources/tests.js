@@ -7,7 +7,7 @@ function addItems(newTodo, contentWindow) {
       setTimeout(function(i) {
           var inputEvent = document.createEvent('Event');
           inputEvent.initEvent('input', true, true);
-          newTodo.value = 'Something to do ' + i;
+          newTodo.value = 'Something to do ' + (i+1);
           newTodo.dispatchEvent(inputEvent);
 
           var keydownEvent = document.createEvent('Event');
@@ -71,16 +71,16 @@ function generalTests() {
 
       return atLeast(contentDocument, '.toggle:checked', numberOfItemsToAdd);
     }),
-    new BenchmarkTestStep('Changing View', function (newTodo, contentWindow, contentDocument) {
-      contentDocument.querySelectorAll('#filters a, .filters a')[1].click();
-
-      return atMost(contentDocument, '.toggle', numberOfItemsToAdd);
-    }),
-    new BenchmarkTestStep('Changing View back', function (newTodo, contentWindow, contentDocument) {
-      contentDocument.querySelectorAll('#filters a, .filters a')[0].click();
-
-      return atLeast(contentDocument, '.toggle', numberOfItemsToAdd);
-    }),
+    // new BenchmarkTestStep('Changing View', function (newTodo, contentWindow, contentDocument) {
+    //   contentDocument.querySelectorAll('#filters a, .filters a')[1].click();
+    //
+    //   return atMost(contentDocument, '.toggle', numberOfItemsToAdd);
+    // }),
+    // new BenchmarkTestStep('Changing View back', function (newTodo, contentWindow, contentDocument) {
+    //   contentDocument.querySelectorAll('#filters a, .filters a')[0].click();
+    //
+    //   return atLeast(contentDocument, '.toggle', numberOfItemsToAdd);
+    // }),
     new BenchmarkTestStep('Deleting all items', function (newTodo, contentWindow, contentDocument) {
       var deleteButtons = contentDocument.querySelectorAll('.destroy');
       for (var i = 0; i < deleteButtons.length; i++) {
