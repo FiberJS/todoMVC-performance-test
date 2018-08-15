@@ -107,8 +107,21 @@ Suites.push({
 });
 
 Suites.push({
-  name: 'FiberJS',
+  name: 'FiberJS v1',
   url: 'todomvc/fiberjs/index.html',
+  version: '0.1.0',
+  prepare: function (runner, contentWindow, contentDocument) {
+    return runner.waitForElement('#new-todo').then(function (element) {
+      element.focus();
+      return element;
+    });
+  },
+  tests: generalTests()
+});
+
+Suites.push({
+  name: 'FiberJS v2',
+  url: 'todomvc/fiberjs2/index.html',
   version: '0.1.0',
   prepare: function (runner, contentWindow, contentDocument) {
     return runner.waitForElement('#new-todo').then(function (element) {
@@ -199,18 +212,18 @@ Suites.push({
 });
 
 
-Suites.push({
-  name: 'Mercury',
-  url: 'todomvc/mercury/index.html',
-  version: '3.1.7 + virtual-dom 0.8',
-  prepare: function (runner, contentWindow, contentDocument) {
-    return runner.waitForElement('#new-todo').then(function (element) {
-      element.focus();
-      return element;
-    });
-  },
-  tests: generalTests()
-});
+// Suites.push({
+//   name: 'Mercury',
+//   url: 'todomvc/mercury/index.html',
+//   version: '3.1.7 + virtual-dom 0.8',
+//   prepare: function (runner, contentWindow, contentDocument) {
+//     return runner.waitForElement('#new-todo').then(function (element) {
+//       element.focus();
+//       return element;
+//     });
+//   },
+//   tests: generalTests()
+// });
 
 // Suites.push({
 //   name: 'Elm',
